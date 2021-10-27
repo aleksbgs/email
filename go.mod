@@ -1,4 +1,4 @@
-module email
+module github.com/aleksbgs/email
 
 go 1.17
 
