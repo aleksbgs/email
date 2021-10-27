@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/aleksbgs/ambassador/src/utils"
 	"net/smtp"
 )
 import "github.com/confluentinc/confluent-kafka-go/kafka"
@@ -10,10 +11,10 @@ import "github.com/confluentinc/confluent-kafka-go/kafka"
 func main() {
 
 	consumer, err := kafka.NewConsumer(&kafka.ConfigMap{
-		"bootstrap.servers": "pkc-4ygn6.europe-west3.gcp.confluent.cloud:9092",
+		"bootstrap.servers": utils.ViperEnvVariable("bootstrap.servers"),
 		"security.protocol": "SASL_SSL",
-		"sasl.username":     "DQF3PX3S424LV5A3",
-		"sasl.password":     "f62c0f8M8nQ2tQTxksKPFplfE/yNlGweddVCq0PINec8oqn5NxgNERi3k6okTceM",
+		"sasl.username":     utils.ViperEnvVariable("sasl.username"),
+		"sasl.password":     utils.ViperEnvVariable("sasl.password"),
 		"sasl.mechanism":    "PLAIN",
 		"group.id":          "myGroup",
 		"auto.offset.reset": "earliest",
