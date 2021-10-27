@@ -3,7 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/aleksbgs/ambassador/src/utils"
+	"github.com/aleksbgs/email/utils"
 	"net/smtp"
 )
 import "github.com/confluentinc/confluent-kafka-go/kafka"
