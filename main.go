@@ -3,19 +3,21 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/aleksbgs/email/utils"
+	"github.com/confluentinc/confluent-kafka-go/kafka"
 	"net/smtp"
+	"os"
 )
-import "github.com/confluentinc/confluent-kafka-go/kafka"
 
 func main() {
 
+	fmt.Println(os.Getenv("KAFKA_TOPIC"))
+
 	consumer, err := kafka.NewConsumer(&kafka.ConfigMap{
-		"bootstrap.servers": utils.ViperEnvVariable("bootstrap.servers"),
-		"security.protocol": "SASL_SSL",
-		"sasl.username":     utils.ViperEnvVariable("sasl.username"),
-		"sasl.password":     utils.ViperEnvVariable("sasl.password"),
-		"sasl.mechanism":    "PLAIN",
+		"bootstrap.servers": os.Getenv("BOOTSTRAP_SERVERS"),
+		"sasl.username":     os.Getenv("SASL_USERNAME"),
+		"sasl.password":     os.Getenv("SASL_PASSWORD"),
+		"sasl.mechanism":    os.Getenv("SASL_MECHANISM"),
+		"security.protocol": os.Getenv("SECURITY_PROTOCOL"),
 		"group.id":          "myGroup",
 		"auto.offset.reset": "earliest",
 	})
@@ -39,13 +41,19 @@ func main() {
 
 		json.Unmarshal(msg.Value, &message)
 
+		host := os.Getenv("EMAIL_HOST")
+
+		port := os.Getenv("EMAIL_PORT")
+
+		auth := smtp.PlainAuth("", os.Getenv("EMAIL_USERNAME"), os.Getenv("EMAIL_PASSWORD"), host)
+
 		ambassadorMessage := []byte(fmt.Sprintf("You earned $%f from the link #%s", message["ambassador_revenue"], message["code"]))
 
-		smtp.SendMail("host.docker.internal:1025", nil, "no-reply@email.com", []string{message["ambassador_email"].(string)}, ambassadorMessage)
+		smtp.SendMail(host+":"+port, auth, "no-reply@email.com", []string{message["ambassador_email"].(string)}, ambassadorMessage)
 
 		adminMessage := []byte(fmt.Sprintf("Order #%d with a total of $%f has been completed", message["id"], message["admin_revenue"]))
 
-		smtp.SendMail("host.docker.internal:1025", nil, "no-reply@email.com", []string{"admin@admin.com"}, adminMessage)
+		smtp.SendMail(host+":"+port, auth, "no-reply@email.com", []string{"admin@admin.com"}, adminMessage)
 	}
 
 	consumer.Close()

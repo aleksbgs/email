@@ -5,3 +5,15 @@ services:
       context: .
       dockerfile: prod.dockerfile
     image: aleksbgs1/email:0.0.1
+    environment:
+      BOOTSTRAP_SERVERS: pkc-4ygn6.europe-west3.gcp.confluent.cloud:9092
+      SECURITY_PROTOCOL: SASL_SSL
+      SASL_USERNAME: DQF3PX3S424LV5A3
+      SASL_PASSWORD: f62c0f8M8nQ2tQTxksKPFplfE/yNlGweddVCq0PINec8oqn5NxgNERi3k6okTceM
+      SASL_MECHANISM: PLAIN
+      KAFKA_TOPIC: email_topic
+      EMAIL_HOST: smtp.mailtrap.io
+      EMAIL_PORT: 2525
+      EMAIL_USERNAME: 2338e0caec8817
+      EMAIL_PASSWORD: 368db79ffcdb2b
+
