@@ -1,7 +1,7 @@
-version: '3.9'
+version: '3'
 services:
   email_backend:
     build:
       context: .
       dockerfile: prod.dockerfile
-    image: aleksbgs/email:0.0.1
+    image: aleksbgs1/email:0.0.1
