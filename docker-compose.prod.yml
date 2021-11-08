@@ -4,7 +4,7 @@ services:
     build:
       context: .
       dockerfile: prod.dockerfile
-    image: aleksbgs1/email:0.0.1
+    image: aleksbgs1/email:0.0.2
     environment:
       BOOTSTRAP_SERVERS: pkc-4ygn6.europe-west3.gcp.confluent.cloud:9092
       SECURITY_PROTOCOL: SASL_SSL
